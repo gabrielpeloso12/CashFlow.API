@@ -1,9 +1,8 @@
-﻿using CashFlow.Communication.Request;
-using CashFlow.Application.UseCases.Expenses.Register;
+﻿using CashFlow.Application.UseCases.Expenses;
+using CashFlow.Communication.Enums;
+using CashFlow.Exception;
 using CommonTestUtilities.Request;
 using FluentAssertions;
-using CashFlow.Exception;
-using CashFlow.Communication.Enums;
 
 
 namespace Validator.Tests.Expenses.Register;
@@ -14,7 +13,7 @@ public class RegisterExpensesValidatorTests
     public void Sucess()
     {
         //Arranje 
-        var validator = new RegisterExpenseValidator();
+        var validator = new ExpenseValidator();
         var request = RequestRegisterExpenseJsonBuilder.Build();
 
         //Act
@@ -26,12 +25,12 @@ public class RegisterExpensesValidatorTests
 
     [Theory]
     [InlineData("")]
-    [InlineData("          ")]
+    [InlineData("         ")]
     [InlineData(null)]
     public void Error_Title_Empty(string title)
     {
         //Arranje 
-        var validator = new RegisterExpenseValidator();
+        var validator = new ExpenseValidator();
         var request = RequestRegisterExpenseJsonBuilder.Build();
         request.Title = title;
 
@@ -47,7 +46,7 @@ public class RegisterExpensesValidatorTests
     public void Error_Date_Future()
     {
         //Arranje 
-        var validator = new RegisterExpenseValidator();
+        var validator = new ExpenseValidator();
         var request = RequestRegisterExpenseJsonBuilder.Build();
         request.Date = DateTime.UtcNow.AddDays(1);
 
@@ -63,7 +62,7 @@ public class RegisterExpensesValidatorTests
     public void Error_Payment_Type_Invalid()
     {
         //Arranje 
-        var validator = new RegisterExpenseValidator();
+        var validator = new ExpenseValidator();
         var request = RequestRegisterExpenseJsonBuilder.Build();
         request.PaymentType = (PaymentType)800;
 
@@ -83,7 +82,7 @@ public class RegisterExpensesValidatorTests
     public void Erro_Amount_Invalid(decimal amount)
     {
         //Arranje 
-        var validator = new RegisterExpenseValidator();
+        var validator = new ExpenseValidator();
         var request = RequestRegisterExpenseJsonBuilder.Build();
         request.Amount = amount;
 
