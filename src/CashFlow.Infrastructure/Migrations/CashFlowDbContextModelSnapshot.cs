@@ -53,7 +53,28 @@ namespace CashFlow.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Expenses");
+                    b.ToTable("Tags", (string)null);
+                });
+
+            modelBuilder.Entity("CashFlow.Domain.Entities.Tag", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("ExpenseId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("Value")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExpenseId");
+
+                    b.ToTable("Tag");
                 });
 
             modelBuilder.Entity("CashFlow.Domain.Entities.User", b =>
@@ -85,7 +106,7 @@ namespace CashFlow.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("CashFlow.Domain.Entities.Expense", b =>
@@ -97,6 +118,22 @@ namespace CashFlow.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("CashFlow.Domain.Entities.Tag", b =>
+                {
+                    b.HasOne("CashFlow.Domain.Entities.Expense", "Expense")
+                        .WithMany("Tags")
+                        .HasForeignKey("ExpenseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Expense");
+                });
+
+            modelBuilder.Entity("CashFlow.Domain.Entities.Expense", b =>
+                {
+                    b.Navigation("Tags");
                 });
 #pragma warning restore 612, 618
         }

@@ -153,4 +153,13 @@
   <data name="EMAIL_OR_PASSWORD_INVALID" xml:space="preserve">
     <value>E-mail e/ou senha invalidos</value>
   </data>
+  <data name="PASSWORD_DIFFERENT_CURRENT_PASSWORD" xml:space="preserve">
+    <value>The password entered is different from the current password.</value>
+  </data>
+  <data name="EMAIL_ALREADY_REGISTERED" xml:space="preserve">
+    <value>This email is already in use.</value>
+  </data>
+  <data name="TAG_TYPE_NOT_SUPPORTED" xml:space="preserve">
+    <value>Tag não suportada.</value>
+  </data>
 </root>

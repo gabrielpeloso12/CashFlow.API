@@ -1,20 +1,20 @@
 ﻿using CashFlow.Application.UseCases.Expenses;
 using CashFlow.Communication.Enums;
 using CashFlow.Exception;
-using CommonTestUtilities.Request;
+using CommonTestUtilities.Requests;
 using FluentAssertions;
 
 
-namespace Validator.Tests.Expenses.Register;
+namespace Validator.Tests.Expenses;
 
-public class RegisterExpensesValidatorTests
+public class ExpensesValidatorTests
 {
     [Fact]
     public void Sucess()
     {
         //Arranje 
         var validator = new ExpenseValidator();
-        var request = RequestRegisterExpenseJsonBuilder.Build();
+        var request = RequestExpenseJsonBuilder.Build();
 
         //Act
         var result = validator.Validate(request);
@@ -31,7 +31,7 @@ public class RegisterExpensesValidatorTests
     {
         //Arranje 
         var validator = new ExpenseValidator();
-        var request = RequestRegisterExpenseJsonBuilder.Build();
+        var request = RequestExpenseJsonBuilder.Build();
         request.Title = title;
 
         //Act
@@ -39,7 +39,7 @@ public class RegisterExpensesValidatorTests
 
         //Assert
         result.IsValid.Should().BeFalse();
-        result.Errors.Should().ContainSingle().And.Contain(e => e.ErrorMessage.Equals(ResourceErrorMessages.TITLE_REQUIRED)); 
+        result.Errors.Should().ContainSingle().And.Contain(e => e.ErrorMessage.Equals(ResourceErrorMessages.TITLE_REQUIRED));
     }
 
     [Fact]
@@ -47,7 +47,7 @@ public class RegisterExpensesValidatorTests
     {
         //Arranje 
         var validator = new ExpenseValidator();
-        var request = RequestRegisterExpenseJsonBuilder.Build();
+        var request = RequestExpenseJsonBuilder.Build();
         request.Date = DateTime.UtcNow.AddDays(1);
 
         //Act
@@ -63,7 +63,7 @@ public class RegisterExpensesValidatorTests
     {
         //Arranje 
         var validator = new ExpenseValidator();
-        var request = RequestRegisterExpenseJsonBuilder.Build();
+        var request = RequestExpenseJsonBuilder.Build();
         request.PaymentType = (PaymentType)800;
 
         //Act
@@ -83,7 +83,7 @@ public class RegisterExpensesValidatorTests
     {
         //Arranje 
         var validator = new ExpenseValidator();
-        var request = RequestRegisterExpenseJsonBuilder.Build();
+        var request = RequestExpenseJsonBuilder.Build();
         request.Amount = amount;
 
         //Act
@@ -92,5 +92,21 @@ public class RegisterExpensesValidatorTests
         //Assert
         result.IsValid.Should().BeFalse();
         result.Errors.Should().ContainSingle().And.Contain(e => e.ErrorMessage.Equals(ResourceErrorMessages.AMOUNT_MUST_BE_GREATER_THAN_ZERO));
+    }
+
+    [Fact]
+    public void Error_Tag_Invalid()
+    {
+        //Arrange
+        var validator = new ExpenseValidator();
+        var request = RequestExpenseJsonBuilder.Build();
+        request.Tags.Add((Tag)1000);
+
+        //Act
+        var result = validator.Validate(request);
+
+        //Assert
+        result.IsValid.Should().BeFalse();
+        result.Errors.Should().ContainSingle().And.Contain(e => e.ErrorMessage.Equals(ResourceErrorMessages.TAG_TYPE_NOT_SUPPORTED));
     }
 }
